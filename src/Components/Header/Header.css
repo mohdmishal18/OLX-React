@@ -162,3 +162,27 @@
     display: none;
   }
 }
+
+.login_link:hover {
+  text-decoration: none; /* Remove underline on hover */
+}
+
+.login_link {
+  color: rgb(0, 0, 0);
+  text-decoration: underline; 
+  font-weight: bold; /* Make text bold */
+  transition: color 0.3s; /* Smooth transition for color change */
+}
+
+.logout_link
+{
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+  text-decoration: underline;
+  font-weight: bold; /* Make text bold */
+  transition: color 0.3s; /* Smooth transition for color change */
+}
+.logout_link:hover
+{
+  text-decoration: none;
+}

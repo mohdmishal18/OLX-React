@@ -1,6 +1,9 @@
 import React from 'react';
-import { useState , useContext} from 'react';
+import { useState , useContext } from 'react';
+import { useNavigate , Link } from 'react-router-dom';
 import { FirebaseContext } from '../../store/FirebaseContext';
+import { auth } from '../../firebase/config';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import Logo from '../../olx-logo.png';
 import './Login.css';
 
@@ -8,18 +11,34 @@ function Login()
 {
   const [email , setEmail] = useState('')
   const [password , setPassword] = useState('')
-
-  const handleLogin = (e) =>
+  const navigate = useNavigate()
+  const handleLogin = async (e) =>
   {
     e.preventDefault()
-
+    try
+    {
+      signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user
+        navigate('/')
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        console.log(errorCode + errorMessage)
+      });
+    }
+    catch(error)
+    {
+      console.log("error while login user" + error.message)
+    }
   }
 
   return (
     <div>
       <div className="loginParentDiv">
         <img width="200px" height="200px" src={Logo}></img>
-        <form>
+        <form onSubmit={handleLogin}>
           <label htmlFor="fname">Email</label>
           <br />
           <input
@@ -47,7 +66,7 @@ function Login()
           <br />
           <button>Login</button>
         </form>
-        <a>Signup</a>
+        <Link className='signup_link' to='/signup'>Signup</Link>
       </div>
     </div>
   );

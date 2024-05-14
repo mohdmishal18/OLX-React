@@ -1,6 +1,6 @@
 import React, { useState , useContext } from 'react';
 import { collection , addDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import { FirebaseContext } from '../../store/FirebaseContext';
 import { db ,auth  } from '../../firebase/config';
 import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth';
@@ -95,7 +95,7 @@ export default function Signup() {
           <br />
           <button>Signup</button>
         </form>
-        <a>Login</a>
+        <Link className='login_link' to='/login'>Login</Link>
       </div>
     </div>
   );

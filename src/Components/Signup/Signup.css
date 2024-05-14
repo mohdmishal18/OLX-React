@@ -36,3 +36,14 @@
     cursor: pointer;
   }
   
+
+  .login_link {
+    color: rgb(0, 0, 0);
+    text-decoration: underline; /* Add underline */
+    font-weight: bold; /* Make text bold */
+    transition: color 0.3s; /* Smooth transition for color change */
+  }
+  
+  .login_link:hover {
+    text-decoration: none; /* Remove underline on hover */
+  }
