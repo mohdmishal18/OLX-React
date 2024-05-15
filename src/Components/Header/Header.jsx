@@ -33,7 +33,7 @@ function Header() {
     <div className="headerParentDiv">
       <div className="headerChildDiv">
         <div className="brandName">
-          <OlxLogo></OlxLogo>
+          <Link to='/'><OlxLogo></OlxLogo></Link>
         </div>
         <div className="placeSearch">
           <Search></Search>
@@ -66,7 +66,7 @@ function Header() {
           <SellButton></SellButton>
           <div className="sellMenuContent">
             <SellButtonPlus></SellButtonPlus>
-            <span>SELL</span>
+            <span><Link to='/create'>SELL</Link></span>
           </div>
         </div>
       </div>
