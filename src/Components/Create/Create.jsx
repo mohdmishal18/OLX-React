@@ -4,19 +4,52 @@ import './Create.css';
 import Header from '../Header/Header';
 import { AuthContext } from '../../store/FirebaseContext';
 import { db , auth , storage } from '../../firebase/config';
+import { collection , addDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 const Create = () => {
 
   const {user} = useContext(AuthContext)
-
+  const navigate = useNavigate()
   const [name , setName] = useState('')
   const [category , setCategory] = useState('')
   const [price , setPrice] = useState('')
   const [image , setImage] = useState('')
 
-  const handleSubmit = () =>
+  const handleSubmit = async () =>
   {
-    
+    try
+    {
+      const storageRef = ref(storage, `images/${image.name}`);
+      const snapShot = await uploadBytes(storageRef , image)
+      const imageUrl = await getDownloadURL(snapShot.ref)
+
+      const userCollection = collection(db , 'products')
+      const date = new Date()
+      const Product = await addDoc(userCollection , 
+        {
+          name : name ,
+          category : category,
+          price : price,
+          image : imageUrl,
+          userId : user.uid,
+          createdAt : date.toDateString()
+        }
+      )
+
+      setName("");
+      setPrice("");
+      setImage(null);
+      setCategory("");
+
+      navigate("/")
+
+    }
+    catch(error)
+    {
+      console.log(error.message)
+    }
+
   }
 
   return (
