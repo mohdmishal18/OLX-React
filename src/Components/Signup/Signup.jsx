@@ -1,5 +1,6 @@
 import React, { useState , useContext } from 'react';
 import { collection , addDoc } from 'firebase/firestore';
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate , Link } from 'react-router-dom';
 import { FirebaseContext } from '../../store/FirebaseContext';
 import { db ,auth  } from '../../firebase/config';
@@ -21,27 +22,39 @@ export default function Signup() {
   {
     e.preventDefault();
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      
-      await updateProfile(user, { displayName: username });
-      
-      const userCollection = collection(db, 'users');
-      await addDoc(userCollection, {
-        id: user.uid,
-        userName: username,
-        phone: phone,
-      });
-  
+      if (username.trim() == "") {
+        toast.error("Not valid username");
+      } else if (phone.length !== 10) {
+        toast.error("Phone number should be 10 numbers");
+      }
+      else
+      {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        await updateProfile(user, { displayName: username });
+        
+        const userCollection = collection(db, 'users');
+        await addDoc(userCollection, {
+          id: user.uid,
+          userName: username,
+          phone: phone,
+        });
+    
       navigate("/login");
+      }
+      
     } catch (error) {
-      console.error("Error creating user:", error.message);
+      toast.error(" Password should be at least 6 characters ");
+      console.log(error);
+
     }
   }
 
   return (
     <div>
       <div className="signupParentDiv">
+      <Toaster />
         <img width="200px" height="200px" src={Logo}></img>
         <form onSubmit={handleSubmit}>
           <label htmlFor="fname">Username</label>
@@ -97,6 +110,7 @@ export default function Signup() {
         </form>
         <Link className='login_link' to='/login'>Login</Link>
       </div>
+      
     </div>
   );
 }

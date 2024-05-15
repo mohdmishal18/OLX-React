@@ -4,6 +4,7 @@ import { useNavigate , Link } from 'react-router-dom';
 import { FirebaseContext } from '../../store/FirebaseContext';
 import { auth } from '../../firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import toast, { Toaster } from "react-hot-toast";
 import Logo from '../../olx-logo.png';
 import './Login.css';
 
@@ -23,9 +24,9 @@ function Login()
         navigate('/')
       })
       .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
-        console.log(errorCode + errorMessage)
+        const errorCode = error.code;
+        const errMessage = errorCode.message;
+        toast.error("Incorrect Information");
       });
     }
     catch(error)
@@ -36,7 +37,9 @@ function Login()
 
   return (
     <div>
+      
       <div className="loginParentDiv">
+      <Toaster />
         <img width="200px" height="200px" src={Logo}></img>
         <form onSubmit={handleLogin}>
           <label htmlFor="fname">Email</label>
@@ -68,6 +71,7 @@ function Login()
         </form>
         <Link className='signup_link' to='/signup'>Signup</Link>
       </div>
+      
     </div>
   );
 }

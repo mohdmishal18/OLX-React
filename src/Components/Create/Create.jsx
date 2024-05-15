@@ -1,11 +1,13 @@
 import React, { Fragment,useContext,useState } from 'react';
 import { ref , uploadBytes , getDownloadURL } from 'firebase/storage';
+import toast, { Toaster } from "react-hot-toast";
 import './Create.css';
 import Header from '../Header/Header';
 import { AuthContext } from '../../store/FirebaseContext';
 import { db , auth , storage } from '../../firebase/config';
 import { collection , addDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { checkValidation } from "../../validations/productValidation";
 
 const Create = () => {
 
@@ -18,6 +20,17 @@ const Create = () => {
 
   const handleSubmit = async () =>
   {
+    const messageValid = checkValidation(name, category, price);
+    if (messageValid !== null) {
+      toast.error(messageValid);
+      return; // Stop execution if validation fails
+    }
+  
+    if (!image) {
+      toast.error("Please select an image before submitting");
+      return; // Stop execution if image is not selected
+    }
+
     try
     {
       const storageRef = ref(storage, `images/${image.name}`);
@@ -57,7 +70,7 @@ const Create = () => {
       <Header />
       <card>
         <div className="centerDiv">
-          
+        <Toaster />
             <label htmlFor="fname">Name</label>
             <br />
             <input
@@ -100,6 +113,7 @@ const Create = () => {
             <button onClick={handleSubmit} className="uploadBtn">upload and Submit</button>
           
         </div>
+       
       </card>
     </Fragment>
   );
